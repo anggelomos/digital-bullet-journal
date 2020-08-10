@@ -10,7 +10,7 @@ class  DataRetriever:
     def productivity_time(self, date: str=current_date):
         raw_data = requests.get(f"https://www.rescuetime.com/anapi/data?key={self.rescuetime_key}&perspective=interval&restrict_kind=productivity&interval=day&restrict_begin={date}&restrict_end={date}&format=json")
         raw_productivity_data = raw_data.json()["rows"]
-        productivity_time = {"very productive":0, "productive": 0, "neutral": 0, "distracting": 0, "very distracting": 0}
+        productivity_time = {"very productive":0, "productive": 0, "neutral": 0, "distracting": 0, "very distracting": 0, "total":0}
         for data in raw_productivity_data:
             category = data[3]
             time = data[1]
@@ -26,5 +26,5 @@ class  DataRetriever:
                 productivity_time["very distracting"] = time
             else:
                 raise IndexError("Wrong productivity category")
+            productivity_time["total"] += time
         return productivity_time
-#print(productivity_time)
