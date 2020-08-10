@@ -7,7 +7,19 @@ class  DataRetriever:
 
     current_date = str(date.today())
 
-    def productivity_time(self, date: str=current_date):
+    def productivity_time(self, date: str=current_date)->dict:
+        """Capture data from the rescuetime productivity categories (very productive, productive, neutral, distracting, very distracting, total) using the rescuetime API.
+
+        Parameters
+        ----------
+        date : str, optional
+            Date from which the data should be taken in Format ISO 8601 "YYYY-MM-DD", Ex. 2020-08.10 by default current_date
+
+        Returns
+        -------
+        productivity_time: dict
+            Dictionary where the key is a productivity categories (very productive, productive, neutral, distracting, very distracting, total) and the value is the time in seconds, Ex {'very productive': 8432, 'productive': 722, 'neutral': 1843, 'distracting': 970, 'very distracting': 23, 'total': 11990}.  
+        """
         raw_data = requests.get(f"https://www.rescuetime.com/anapi/data?key={self.rescuetime_key}&perspective=interval&restrict_kind=productivity&interval=day&restrict_begin={date}&restrict_end={date}&format=json")
         raw_productivity_data = raw_data.json()["rows"]
         productivity_time = {"very productive":0, "productive": 0, "neutral": 0, "distracting": 0, "very distracting": 0, "total":0}
