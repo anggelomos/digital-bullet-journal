@@ -1,7 +1,7 @@
 import requests
 from datetime import date
 
-class  DataRetreiver:
+class  DataRetriever:
     def __init__(self, rescuetime_key):
         self.rescuetime_key = rescuetime_key
 
