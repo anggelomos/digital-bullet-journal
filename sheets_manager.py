@@ -40,6 +40,12 @@ class SheetsManager:
     def title(self):
         return self.spreadsheet_data["properties"]["title"]
 
+    def __repr__(self):
+        return f"SheetsManager(gsheet_id='YourSpreadsheetID')"
+    
+    def __str__(self):
+        return f"Title: {self.title}\nData: {self.values}"
+
     def read(self, cell_range: str) -> list:
         """Read cell values within the range specified in cells
 
@@ -96,5 +102,5 @@ class SheetsManager:
     def values(self):
         sheet_title = self.spreadsheet_data["sheets"][0]["properties"]["title"]
         sheet_values = self.read(cell_range=sheet_title)
-        return sheet_values
+        return sheet_values 
 
