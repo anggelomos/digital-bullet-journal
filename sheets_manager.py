@@ -34,10 +34,14 @@ class SheetsManager:
 
     @property
     def spreadsheet_data(self):
+        """ Return all the data available in the api method get.
+        """
         return SheetsManager.sheet.get(spreadsheetId=self.gsheet_id, includeGridData=False).execute()
 
     @property
     def title(self):
+        """ Return spreadsheet's title. 
+        """
         return self.spreadsheet_data["properties"]["title"]
 
     def __repr__(self):
@@ -100,9 +104,8 @@ class SheetsManager:
 
     @property
     def values(self):
+        """ Return a list with all the values in the first sheet of the spreadsheet.
+        """
         sheet_title = self.spreadsheet_data["sheets"][0]["properties"]["title"]
         sheet_values = self.read(cell_range=sheet_title)
         return sheet_values 
-
-sheet_test = SheetsManager("1Hae-zhZKMY5PVWIipNWW7YgjS3ayWBi1jT93i46I5AE")
-print(sheet_test.spreadsheet_data)
