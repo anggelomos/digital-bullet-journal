@@ -32,6 +32,14 @@ class SheetsManager:
     service = build('sheets', 'v4', credentials=gsheet_creds)
     sheet = service.spreadsheets()
 
+    @property
+    def spreadsheet_data(self):
+        return SheetsManager.sheet.get(spreadsheetId=self.gsheet_id, includeGridData=True).execute()
+
+    @property
+    def title(self):
+        return self.spreadsheet_data["properties"]["title"]
+
     def read(self, cell_range: str) -> list:
         """Read cell values within the range specified in cells
 
@@ -83,4 +91,10 @@ class SheetsManager:
                                                     body=writing_data,
                                                     valueInputOption='USER_ENTERED').execute()
         return writing_result
+
+    @property
+    def values(self):
+        sheet_title = self.spreadsheet_data["sheets"][0]["properties"]["title"]
+        sheet_values = self.read(cell_range=sheet_title)
+        return sheet_values
 
