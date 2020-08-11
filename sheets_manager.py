@@ -33,6 +33,20 @@ class SheetsManager:
     sheet = service.spreadsheets()
 
     def write(self, cell: str, data: list) -> dict:
+        """Update cells starting in the cell according to the data
+
+        Parameters
+        ----------
+        cell : str
+            Starting cell. Ex. "A1"
+        data : list(list)
+            Data intended to write. Ex. [[1], [1, 1], [1]]
+
+        Returns
+        -------
+        writing_result: dict
+            Dictionary containing information about the writing operation. Ex. {'spreadsheetId': '1Hae-zhZKMY5PVWIipNWW7YgjS3ayWBi1jT93i46I5AE', 'updatedRange': 'Sheet1!F2:G4', 'updatedRows': 3, 'updatedColumns': 2, 'updatedCells': 4}
+        """
         writing_data = {'values': data}
         writing_result = SheetsManager.sheet.values().update(spreadsheetId=self.gsheet_id,
                                                     range=cell,
