@@ -119,6 +119,8 @@ class DatabaseSheet(SheetsManager):
     
     @property
     def headers(self):
+        """ Return the first value of each row.
+        """
         sheet_headers={}
         for index,row in enumerate(self.values):
             header = row[0]
