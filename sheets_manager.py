@@ -1,6 +1,6 @@
 import pickle
 import os.path
-from datetime import date
+import datetime
 from openpyxl.utils.cell import get_column_letter
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -142,6 +142,29 @@ class DatabaseSheet(SheetsManager):
         """
         split_date = requested_date.split("-")
         split_date = [int(value) for value in split_date]
-        delta_days = date(split_date[0], split_date[1], split_date[2])-date(2020, 8, 10)
+        delta_days = datetime.date(split_date[0], split_date[1], split_date[2]) - datetime.date(2020, 8, 10)
         days_between = delta_days.days
         return get_column_letter(days_between+2)
+
+    def week_data(self, requested_date: str) -> list:
+        """ Return a list with the week number and the monday date in ISO 8601 of the week containing the requested_date.
+
+        Parameters
+        ----------
+        requested_date : str
+            Date in ISO 8601 format contained in the week.
+
+        Returns
+        -------
+        week_data : list
+            list with the week number and the monday date in ISO 8601 of the week containing the requested_date. Ex. [33, '2020-08-10'
+        """
+        split_date = requested_date.split("-")
+        split_date = [int(value) for value in split_date]
+        requested_date = datetime.date(split_date[0], split_date[1], split_date[2])
+
+        _,week_number,_ = requested_date.isocalendar()
+        monday_date = requested_date - datetime.timedelta(days=requested_date.weekday())
+
+        return [week_number, str(monday_date)]
+
