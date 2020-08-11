@@ -32,12 +32,12 @@ class SheetsManager:
     service = build('sheets', 'v4', credentials=gsheet_creds)
     sheet = service.spreadsheets()
 
-    def read(self, cells: str) -> list:
+    def read(self, cell_range: str) -> list:
         """Read cell values within the range specified in cells
 
         Parameters
         ----------
-        cells : str
+        cell_range : str
             Reading range. Ex. "A1:B2"
 
         Returns
@@ -46,11 +46,20 @@ class SheetsManager:
             cell values converted into float if necessary. Ex. [["Hola", "Value"], [1.0, 2.0]]
         """
         result = SheetsManager.sheet.values().get(spreadsheetId=self.gsheet_id,
-                                                  range=cells).execute()
+                                                  range=cell_range).execute()
         read_values = result.get('values', [])
         clean_read_values = []
         for row in read_values:
-            clean_read_values.append([float(value) if value[0].isdigit() else value for value in row])
+            clean_row = []
+            for value in row:
+                if len(value) > 0:
+                    if value[0].isdigit():
+                        clean_row.append(float(value))
+                    else:
+                        clean_row.append(value)
+                else:
+                    clean_row.append(value)
+            clean_read_values.append(clean_row)
         return clean_read_values 
 
     def write(self, cell: str, data: list) -> dict:
@@ -74,3 +83,4 @@ class SheetsManager:
                                                     body=writing_data,
                                                     valueInputOption='USER_ENTERED').execute()
         return writing_result
+
