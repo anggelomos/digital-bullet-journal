@@ -124,4 +124,22 @@ class DatabaseSheet(SheetsManager):
             header = row[0]
             sheet_headers[header] = index+1
         return sheet_headers
-        
+
+    def date_column(self, requested_date:str) -> str:
+        """Return the column A1 notation in the database for the requested date.
+
+        Parameters
+        ----------
+        requested_date : str
+            Date in ISO 8601 format YYYY-MM-DD. Ex. 2020-12-05
+
+        Returns
+        -------
+        Column_A1_notation: str
+            A1 Notated column corresponding to the requested date in the database. Ex. XB
+        """
+        split_date = requested_date.split("-")
+        split_date = [int(value) for value in split_date]
+        delta_days = date(split_date[0], split_date[1], split_date[2])-date(2020, 8, 10)
+        days_between = delta_days.days
+        return get_column_letter(days_between+2)
