@@ -34,7 +34,7 @@ class SheetsManager:
 
     @property
     def spreadsheet_data(self):
-        return SheetsManager.sheet.get(spreadsheetId=self.gsheet_id, includeGridData=True).execute()
+        return SheetsManager.sheet.get(spreadsheetId=self.gsheet_id, includeGridData=False).execute()
 
     @property
     def title(self):
@@ -104,3 +104,5 @@ class SheetsManager:
         sheet_values = self.read(cell_range=sheet_title)
         return sheet_values 
 
+sheet_test = SheetsManager("1Hae-zhZKMY5PVWIipNWW7YgjS3ayWBi1jT93i46I5AE")
+print(sheet_test.spreadsheet_data)
