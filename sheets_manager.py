@@ -1,5 +1,7 @@
 import pickle
 import os.path
+from datetime import date
+from openpyxl.utils.cell import get_column_letter
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -109,3 +111,17 @@ class SheetsManager:
         sheet_title = self.spreadsheet_data["sheets"][0]["properties"]["title"]
         sheet_values = self.read(cell_range=sheet_title)
         return sheet_values 
+
+
+class DatabaseSheet(SheetsManager):
+    def __init__(self, gsheet_id):
+        super().__init__(gsheet_id)
+    
+    @property
+    def headers(self):
+        sheet_headers={}
+        for index,row in enumerate(self.values):
+            header = row[0]
+            sheet_headers[header] = index+1
+        return sheet_headers
+        
