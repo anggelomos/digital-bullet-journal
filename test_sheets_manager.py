@@ -23,5 +23,10 @@ class DataRetrieverTest(unittest.TestCase):
         expected = "BC"
         self.assertEqual(database_test.date_column(testcase), expected)
 
+    def test_week_data(self):
+        testcase = "2020-10-21"
+        expected = [43, '2020-10-19']
+        self.assertEqual(database_test.week_data(testcase), expected)
+
 if __name__ == "__main__":
     unittest.main()
