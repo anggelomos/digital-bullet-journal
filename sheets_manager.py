@@ -72,12 +72,12 @@ class SheetsManager:
         for row in read_values:
             clean_row = []
             for value in row:
-                if len(value) > 0:
+                try:
                     if value[0].isdigit():
                         clean_row.append(float(value))
                     else:
                         clean_row.append(value)
-                else:
+                except :
                     clean_row.append(value)
             clean_read_values.append(clean_row)
         return clean_read_values 
@@ -114,8 +114,9 @@ class SheetsManager:
 
 
 class DatabaseSheet(SheetsManager):
-    def __init__(self, gsheet_id):
+    def __init__(self, gsheet_id, static_headers: list=["month", "week", "day", "date"]):
         super().__init__(gsheet_id)
+        self.static_headers = static_headers
     
     @property
     def headers(self):
@@ -167,4 +168,4 @@ class DatabaseSheet(SheetsManager):
         monday_date = requested_date - datetime.timedelta(days=requested_date.weekday())
 
         return [week_number, str(monday_date)]
-
+    
