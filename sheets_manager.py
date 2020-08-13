@@ -179,8 +179,8 @@ class DatabaseSheet(SheetsManager):
 
         _,week_number,_ = requested_date.isocalendar()
         monday_date = requested_date - datetime.timedelta(days=requested_date.weekday())
-
-        return [week_number, str(monday_date)]
+        sunday_date = monday_date + datetime.timedelta(6)
+        return [week_number, monday_date, sunday_date]
     
     @property
     def dataframe(self):
@@ -197,8 +197,32 @@ class DatabaseSheet(SheetsManager):
         dataframe.set_index('date', inplace=True)  
         return dataframe
 
-class PlotSheet(SheetsManager):
-    def __init__(self, gsheet_id, static_headers: list=["month", "week", "day", "date"]):
-        super().__init__(gsheet_id)
+class PlotSheet(DatabaseSheet):
+    def __init__(self, gsheet_id, static_headers: list=["week number", "day"]):
+        super().__init__(gsheet_id, static_headers)
 
-    
+    def update_plotter(self, database_object, requested_date:str):
+        database_headers = database_object.headers
+        week_number, monday_date, sunday_date = self.week_data(requested_date)
+        monday_index = self.date_column(str(monday_date))
+        sunday_index = self.date_column(str(sunday_date))
+        copy_range = f"{monday_index}1:{sunday_index}{database_headers[-1][1]}"
+        week_data = database_object.read(copy_range)
+
+        zeros_filler = []
+        update_data = []
+        for label, index in self.labels:
+            for database_label, database_index in database_headers:
+                if label == database_label:
+                    zeros_filler.append([0]*7)
+                    update_data.append(week_data[database_index-1])
+            if label == "":
+                zeros_filler.append([""]*7)
+                update_data.append([""]*7)
+
+        cell_paste_index = f"B{self.labels[0][1]}"
+        self.write(cell_paste_index, zeros_filler)
+        self.write(cell_paste_index, update_data)
+        self.write(f"B{self.headers[0][1]}", [[week_number]])
+
+        return update_data
