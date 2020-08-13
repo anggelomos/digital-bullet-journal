@@ -113,7 +113,6 @@ class SheetsManager:
         sheet_values = self.read(cell_range=sheet_title)
         return sheet_values 
 
-
 class DatabaseSheet(SheetsManager):
     def __init__(self, gsheet_id, static_headers: list=["month", "week", "day", "date"]):
         super().__init__(gsheet_id)
@@ -197,3 +196,9 @@ class DatabaseSheet(SheetsManager):
                 dataframe = dataframe.drop([index-1])
         dataframe.set_index('date', inplace=True)  
         return dataframe
+
+class PlotSheet(SheetsManager):
+    def __init__(self, gsheet_id, static_headers: list=["month", "week", "day", "date"]):
+        super().__init__(gsheet_id)
+
+    
