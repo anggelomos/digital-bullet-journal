@@ -122,10 +122,13 @@ class DatabaseSheet(SheetsManager):
     def headers(self):
         """ Return the first value of each row.
         """
-        sheet_headers={}
+        sheet_headers=[]
         for index,row in enumerate(self.values):
-            header = row[0]
-            sheet_headers[header] = index+1
+            if row == []:
+                header = ''
+            else:
+                header = row[0]
+            sheet_headers.append([header, index+1])
         return sheet_headers
 
     def date_column(self, requested_date:str) -> str:
