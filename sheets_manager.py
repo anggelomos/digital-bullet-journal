@@ -131,6 +131,14 @@ class DatabaseSheet(SheetsManager):
             sheet_headers.append([header, index+1])
         return sheet_headers
 
+    @property
+    def labels(self):
+        labels = self.headers.copy()
+        for header in self.headers.keys():
+            if header in self.static_headers:
+                labels.pop(header, None)
+        return labels
+
     def date_column(self, requested_date:str) -> str:
         """Return the column A1 notation in the database for the requested date.
 
