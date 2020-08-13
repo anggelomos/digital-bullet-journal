@@ -135,9 +135,9 @@ class DatabaseSheet(SheetsManager):
     @property
     def labels(self):
         labels = self.headers.copy()
-        for header in self.headers.keys():
+        for header, index in self.headers:
             if header in self.static_headers:
-                labels.pop(header, None)
+                labels.remove([header, index])
         return labels
 
     def date_column(self, requested_date:str) -> str:
