@@ -106,10 +106,10 @@ class SheetsManager:
         return writing_result
 
     @property
-    def values(self):
+    def values(self, sheet_number: int=0):
         """ Return a list with all the values in the first sheet of the spreadsheet.
         """
-        sheet_title = self.spreadsheet_data["sheets"][0]["properties"]["title"]
+        sheet_title = self.spreadsheet_data["sheets"][sheet_number]["properties"]["title"]
         sheet_values = self.read(cell_range=sheet_title)
         return sheet_values 
 
