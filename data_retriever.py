@@ -18,7 +18,7 @@ class  DataRetriever:
         Returns
         -------
         productivity_time: dict
-            Dictionary where the key is a productivity categories (very productive, productive, neutral, distracting, very distracting, total) and the value is the time in seconds, Ex {'very productive': 8432, 'productive': 722, 'neutral': 1843, 'distracting': 970, 'very distracting': 23, 'total': 11990}.  
+            Dictionary where the key is a productivity categories (very productive, productive, neutral, distracting, very distracting, total) and the value is the time in seconds, Ex {'very productive': 8432, 'productive': 722, 'neutral': 1843, 'distracting': 970, 'very distracting': 23, 'logged time': 11990}.  
         """
         raw_data = requests.get(f"https://www.rescuetime.com/anapi/data?key={self.rescuetime_key}&perspective=interval&restrict_kind=productivity&interval=day&restrict_begin={date}&restrict_end={date}&format=json")
         raw_productivity_data = raw_data.json()["rows"]
@@ -38,5 +38,7 @@ class  DataRetriever:
                 productivity_time["very distracting"] = round(time/3600, 2)
             else:
                 raise IndexError("Wrong productivity category")
-            productivity_time["total"] += time
+            productivity_time["total"] += round(time/3600, 2)
+        productivity_time["productive percentage"] = round(productivity_time["very productive"] / productivity_time["total"], 2)
+        productivity_time["distracting percentage"] = round(productivity_time["distracting"] / productivity_time["total"], 2)
         return productivity_time
