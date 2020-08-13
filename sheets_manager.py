@@ -185,6 +185,10 @@ class DatabaseSheet(SheetsManager):
     
     @property
     def dataframe(self):
+        """ Return a pandas dataframe avoiding the static headers
+
+            The labels are the index row names and the date are the column names
+        """
         dataframe = pd.DataFrame(self.values)
         for header, index in self.headers:
             if header == self.static_headers[-1]:
