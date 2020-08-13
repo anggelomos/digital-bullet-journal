@@ -27,15 +27,15 @@ class  DataRetriever:
             category = data[3]
             time = data[1]
             if category == 2:
-                productivity_time["very productive"] = time
+                productivity_time["very productive"] = round(time/3600, 2)
             elif category == 1:
-                productivity_time["productive"] = time
+                productivity_time["productive"] = round(time/3600, 2)
             elif category == 0:
-                productivity_time["neutral"] = time
+                productivity_time["neutral"] = round(time/3600, 2)
             elif category == -1:
-                productivity_time["distracting"] = time
+                productivity_time["distracting"] = round(time/3600, 2)
             elif category == -2:
-                productivity_time["very distracting"] = time
+                productivity_time["very distracting"] = round(time/3600, 2)
             else:
                 raise IndexError("Wrong productivity category")
             productivity_time["total"] += time
