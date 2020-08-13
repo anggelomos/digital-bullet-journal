@@ -59,4 +59,4 @@ def update_database(database_object, data_source, day=None):
     return [insert_cell, database_data]
 
 update_database(bullet_database, data_source)
-plot_sheet.update_plotter(bullet_database, "2020-8-13")
+plot_sheet.update_plotter(bullet_database, str(current_date))
