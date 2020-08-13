@@ -134,6 +134,8 @@ class DatabaseSheet(SheetsManager):
 
     @property
     def labels(self):
+        """ Return the headers avoiding the static headers.
+        """
         labels = self.headers.copy()
         for header, index in self.headers:
             if header in self.static_headers:
