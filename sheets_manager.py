@@ -1,6 +1,7 @@
 import pickle
 import os.path
 import datetime
+import pandas as pd
 from openpyxl.utils.cell import get_column_letter
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -180,3 +181,13 @@ class DatabaseSheet(SheetsManager):
 
         return [week_number, str(monday_date)]
     
+    @property
+    def dataframe(self):
+        dataframe = pd.DataFrame(self.values)
+        for header, index in self.headers:
+            if header == self.static_headers[-1]:
+                dataframe.columns = dataframe.iloc[0]
+            if header in self.static_headers:       
+                dataframe = dataframe.drop([index-1])
+        dataframe.set_index('date', inplace=True)  
+        return dataframe
