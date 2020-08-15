@@ -197,9 +197,9 @@ class DatabaseSheet(SheetsManager):
         dataframe.set_index('date', inplace=True)  
         return dataframe
 
-class PlotSheet(DatabaseSheet):
-    def __init__(self, gsheet_id, static_headers: list=["week number", "day"]):
-        super().__init__(gsheet_id, static_headers)
+class PlotSheet(SheetsManager):
+    def __init__(self, gsheet_id):
+        super().__init__(gsheet_id)
 
     def update_plotter(self, database_object, requested_date:str):
         database_headers = database_object.headers
