@@ -207,22 +207,32 @@ class PlotSheet(SheetsManager):
         monday_index = database_object.date_column(str(monday_date))
         sunday_index = database_object.date_column(str(sunday_date))
         copy_range = f"{monday_index}1:{sunday_index}{database_headers[-1][1]}"
-        week_data = database_object.read(copy_range)
+        week_raw_data = database_object.read(copy_range)
 
         zeros_filler = []
         update_data = []
-        for label, index in self.labels:
-            for database_label, database_index in database_headers:
-                if label == database_label:
-                    zeros_filler.append([0]*7)
-                    update_data.append(week_data[database_index-1])
-            if label == "":
-                zeros_filler.append([""]*7)
-                update_data.append([""]*7)
+        week_data = {}
+        for index, header in enumerate(database_headers):
+            week_data[header[0]] = week_raw_data[index]
 
-        cell_paste_index = f"B{self.labels[0][1]}"
+        labels = [label[0] for label in database_object.labels]
+        labels.insert(0, "date")
+        update_data.append(labels)
+
+        for day in range(8):
+            day_data = []
+            zeros_amount = 0
+            for label in labels:
+                zeros_amount += 1
+                try:
+                    day_data.append(week_data[label][day])
+                except:
+                    pass
+            zeros_filler.append([0]*zeros_amount)
+            update_data.append(day_data)
+
+        cell_paste_index = "B1"
         self.write(cell_paste_index, zeros_filler)
         self.write(cell_paste_index, update_data)
-        self.write(f"B{self.headers[0][1]}", [[week_number]])
 
         return update_data
