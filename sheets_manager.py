@@ -203,9 +203,9 @@ class PlotSheet(SheetsManager):
 
     def update_plotter(self, database_object, requested_date:str):
         database_headers = database_object.headers
-        week_number, monday_date, sunday_date = self.week_data(requested_date)
-        monday_index = self.date_column(str(monday_date))
-        sunday_index = self.date_column(str(sunday_date))
+        week_number, monday_date, sunday_date = database_object.week_data(requested_date)
+        monday_index = database_object.date_column(str(monday_date))
+        sunday_index = database_object.date_column(str(sunday_date))
         copy_range = f"{monday_index}1:{sunday_index}{database_headers[-1][1]}"
         week_data = database_object.read(copy_range)
 
